@@ -1,0 +1,132 @@
+paths:
+  /users:
+    get:
+      summary: Retrieve a list of users
+      tags: [Users]
+      responses:
+        200:
+          description: A list of users.
+    
+    post:
+      summary: Create a new user
+      tags: [Users]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                email:
+                  type: string
+                  format: email
+                password:
+                  type: string
+                  format: password
+                memo:
+                  type: string
+      responses:
+        201:
+          description: User created successfully
+
+  /users/{id}:
+    get:
+      summary: Retrieve a single user by ID
+      tags: [Users]
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: A single user.
+    
+    patch:
+      summary: Update a user's information
+      tags: [Users]
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                email:
+                  type: string
+                  format: email
+                password:
+                  type: string
+                memo:
+                  type: string
+      responses:
+        200:
+          description: User information updated successfully
+        401:
+          description: Authentication failed
+        403:
+          description: Permission denied
+    
+    delete:
+      summary: Delete a user by ID
+      tags: [Users]
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+      responses:
+        204:
+          description: User deleted successfully
+        401:
+          description: Authentication failed
+        403:
+          description: Permission denied
+
+  /users/login:
+    post:
+      summary: User Login
+      tags:
+        - Auth
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  format: email
+                  example: example@example.com
+                password:
+                  type: string
+                  format: password
+                  example: yourpassword123
+      responses:
+        200:
+          description: Login successful. Access token returned.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  access_token:
+                    type: string
+                  token_type:
+                    type: string
+
